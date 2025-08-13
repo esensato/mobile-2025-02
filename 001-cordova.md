@@ -14,6 +14,7 @@
 
 - Executar os comandos abaixo dentro do *Terminal* do *VS Code*
 - Instalar o *Java*
+
 ```bash
 mkdir c:\mobile\java
 cd c:\mobile\java 
