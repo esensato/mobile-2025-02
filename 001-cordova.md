@@ -14,7 +14,7 @@
 
 - Executar os comandos abaixo dentro do *Terminal* do *VS Code*
 - Instalar o *Java*
-```
+```bash
 mkdir c:\mobile\java
 cd c:\mobile\java 
 curl -LO https://download.java.net/java/ga/jdk11/openjdk-11_windows-x64_bin.zip
