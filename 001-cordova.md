@@ -14,7 +14,8 @@
 
 - Executar os comandos abaixo dentro do *Terminal* do *VS Code*
 - Instalar o *Java*
-```
+
+```bash
 mkdir c:\mobile\java
 cd c:\mobile\java 
 curl -LO https://download.java.net/java/ga/jdk11/openjdk-11_windows-x64_bin.zip
@@ -115,18 +116,20 @@ adb devices -l
 
 ### Criando um Projeto
 
-`cordova create cardapio pizzaria.cardapio CardapioApp`
-
-- create: cria um projeto Cordova;
-- cardapio: pasta onde o projeto será criado
-- pizzaria.cardapio: pacote onde o código será gerado
-- CardapioApp: nome do app
+- Comando para criar um projeto novo (substituir os parâmetros):
+```bash
+cordova create PASTA PACOTE ID_APP
+```
+- **create**: cria um projeto Cordova;
+- **PASTA**: pasta onde o projeto será criado
+- **PACOTE**: pacote *java* onde o código será gerado
+- **ID_APP**: identificador da aplicação
 
 ### Adicionando Plataformas
 
 - Acessar o diretório em que o projeto foi criado
 
-`cd cardapio`
+`cd PASTA`
 
 - Adicionar as plataformas
 
@@ -145,17 +148,23 @@ adb devices -l
 - No navegador
 
 `cordova run browser -lc --target=chrome`
-
-### Eventos
-
-- **Atenção!** Não remover a tag `<div id="deviceready">`
-
-- Criar um botão:
-
-    `<button id = "msg">Clique Aqui</button>`
-
-- Editar o arquivo `index.js`
+***
+### App Exemplo
+- Iniciar o emulador em primeiro lugar (pelo *Android Studio* ou linha de comando)
+- Executar os comandos abaixo
+```bash
+cordova create alo-cordova alo.cordova AloCordova
+cd alo-cordova
+cordova platform add android
+cordova run android
 ```
+### Eventos
+- Criar um botão no `index.html`:
+```html
+<button id = "msg">Clique Aqui</button>
+```
+- Editar o arquivo `index.js`
+```javascript
 document.getElementById("msg").addEventListener("click", exibirMensagem); 
 
 let exibirMensagem = () => {
@@ -163,9 +172,9 @@ let exibirMensagem = () => {
 }
 ```
 - Exibir a mensagem dentro de um `<div>` incluir no `index.html`
-```
+```html
 <div class="app">
-    <h1>Cardápio</h1>
+    <h1>Alô Cordova</h1>
     <div id="deviceready">
         <button id = "msg">Clique Aqui</button>
     </div>
@@ -173,38 +182,45 @@ let exibirMensagem = () => {
 </div>
 ```
 - Alterar a função dentro de `index.js`
-```
+```javascript
 let exibirMensagem = () => {
     document.getElementById("conteudo").innerHTML = 'Olá';
 }
 ```
-
 #### Entrada de Dados
-
-`<div id="form"><input type="text" id="texto"></div>`
-
+- Criar uma caixa de texto
+```html
+<div id="form"><input type="text" id="texto"></div>
 ```
+- Obter o texto digitado
+```javascript
 let exibirMensagem = () => {
     let txt = document.getElementById("texto").value;
     document.getElementById("conteudo").innerHTML = txt;
 }
 ```
-
 - Obs: para manter o posicionamento da interface ao abrir o teclado, ajustar o arquivo `AndroidManifest.xml` e incluir a propriedade `android:windowSoftInputMode="adjustPan"` na tag `<activity>`
-
 ### Estilos
-
 - Estilos podem ser editados na pasta `css`, por exemplo, o `index.css`
-
-```
+```css
 .app {
     display: flex;
     flex-direction: column;
     width:100%
 }
 ```
+***
+### App Pensa Rápido
+- Iniciar o emulador em primeiro lugar (pelo *Android Studio* ou linha de comando)
+- Criar o projeto, acessar a pasta, adicionar a plataforma *android* e executar
+```bash
+cordova create pensa-rapido pensa.rapido PensaRapido
+cd pensa-rapido
+cordova platform add android
+cordova run android
+```
 
-### Sistema de Pedidos de Pizza
+### App Sistema de Pedidos de Pizza
 
 - Criar um app para efetuar o pedido de pizza
 
