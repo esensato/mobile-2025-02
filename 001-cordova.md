@@ -114,40 +114,6 @@ adb devices -l
 
 <img src="img/cordova-1.png" width="800" height="200">
 
-### Criando um Projeto
-
-- Comando para criar um projeto novo (substituir os parâmetros):
-```bash
-cordova create PASTA PACOTE ID_APP
-```
-- **create**: cria um projeto Cordova;
-- **PASTA**: pasta onde o projeto será criado
-- **PACOTE**: pacote *java* onde o código será gerado
-- **ID_APP**: identificador da aplicação
-
-### Adicionando Plataformas
-
-- Acessar o diretório em que o projeto foi criado
-
-`cd PASTA`
-
-- Adicionar as plataformas
-
-`cordova platform add android`
-
-<img src="img/cordova-2.png" width="450" height="200">
-
-- Opções: IOS, windows, browser...
-
-### Executando
-
-- No emulador (AVD)
-
-`cordova run android`
-
-- No navegador
-
-`cordova run browser -lc --target=chrome`
 ***
 ### App Exemplo
 - Iniciar o emulador em primeiro lugar (pelo *Android Studio* ou linha de comando)
@@ -219,7 +185,161 @@ cd pensa-rapido
 cordova platform add android
 cordova run android
 ```
+- Definir a folha de estilos com o modelo abaixo
+```css
+html,
+body {
+    height: 100vh;
+    margin: 0;
+    padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+}
 
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f2f4f8;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.card {
+    width: 80vmin;
+    height: 120vmin;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.card-menor {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 100px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    margin-bottom: 5px;
+}
+
+.button {
+    width: 80vmin;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    margin-bottom: 50px;
+}
+
+.button:active {
+    background: #45a049;
+}
+
+.digit {
+    font-size: 50vmin;
+    line-height: 1;
+    font-weight: bold;
+    color: #222;
+}
+
+.digit-menor {
+    font-size: 36px;
+    line-height: 1;
+    font-weight: bold;
+    color: #222;
+}
+
+.text {
+    font-size: 16px;
+    line-height: 1;
+    font-weight: bold;
+    color: #222;
+}
+```
+- A página HTML deverá ser definida conforme o código abaixo
+```html
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="css/index.css">
+    <title>Pensa Rápido</title>
+</head>
+
+<body>
+    <div class="card-menor">
+        <div class="digit-menor" id="txtNumeroSorteado"></div>
+    </div>
+    <div class="button" id="btnJogar">
+        <div class="text">Jogar</div>
+    </div>
+    <div class="card" id="btnNumero">
+        <div class="digit" id="txtNumero"></div>
+    </div>
+    <script src="cordova.js"></script>
+    <script src="js/index.js"></script>
+</body>
+
+</html>
+```
+- Finalmente, a lógica de negócio implementada no *javascript*
+```javascript
+document.addEventListener('deviceready', onDeviceReady, false);
+
+let txtNumero = null;
+let atualizaNumero = null;
+let numeroSorteado = 0;
+let numeroCard = 0;
+
+function onDeviceReady() {
+
+    document.getElementById('btnJogar').addEventListener('click', jogar);
+    document.getElementById('btnNumero').addEventListener('click', parar);
+    txtNumero = document.getElementById('txtNumero');
+    txtNumeroSorteado = document.getElementById('txtNumeroSorteado');
+}
+
+const parar = () => {
+    clearInterval(atualizaNumero);
+
+    if (numeroCard === numeroSorteado) {
+        alert('Você Acertou!')
+    } else {
+        alert('Você Errou!')
+    }
+}
+
+const atualizar = () => {
+
+    numeroCard = Math.floor(Math.random() * 9);
+    txtNumero.innerHTML = numeroCard;
+}
+
+const jogar = () => {
+
+    txtNumero.innerHTML = '';
+    atualizaNumero = setInterval(atualizar, 1000);
+    numeroSorteado = Math.floor(Math.random() * 9);
+    txtNumeroSorteado.innerHTML = numeroSorteado;
+
+}
+```
 ### App Sistema de Pedidos de Pizza
 
 - Criar um app para efetuar o pedido de pizza

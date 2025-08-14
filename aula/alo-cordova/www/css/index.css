@@ -1,0 +1,177 @@
+.app {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    border: solid 1px;
+    height: 80vmin;
+}
+
+.texto {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: solid 1px;
+    padding: 5px;
+    font-size: 21px;
+}
+
+/* --- Botão Android para Cordova --- */
+:root {
+    /* Cores (ajuste conforme sua paleta) */
+    --android-primary: #2962ff;
+    /* Azul Material-ish */
+    --android-primary-900: #0039cb;
+    /* Pressed */
+    --android-on-primary: #ffffff;
+
+    --android-outline: rgba(0, 0, 0, .12);
+    --android-focus: rgba(41, 98, 255, .24);
+    --android-ripple: rgba(255, 255, 255, .24);
+    /* overlay no tema primário */
+}
+
+/* Reset amigável ao Cordova/Android */
+button.btn-android {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    border: none;
+    background: none;
+}
+
+/* Botão preenchido */
+.btn-android {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 88px;
+    /* A11y: alvo confortável */
+    height: 48px;
+    /* Altura padrão Material */
+    padding: 0 24px;
+
+    font: 500 16px/1 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", "Apple Color Emoji", "Segoe UI Emoji";
+    letter-spacing: .0125em;
+
+    color: var(--android-on-primary);
+    background: var(--android-primary);
+    border-radius: 24px;
+    /* cantos arredondados tipo pill */
+
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, .14),
+        0 1px 3px rgba(0, 0, 0, .12);
+    /* elevação leve */
+
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+
+    transition:
+        transform .08s ease,
+        box-shadow .14s ease,
+        background-color .14s ease,
+        opacity .14s ease;
+    overflow: hidden;
+    /* necessário pro ripple */
+}
+
+/* Hover (em desktops) */
+.btn-android:hover {
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, .18),
+        0 3px 6px rgba(0, 0, 0, .16);
+}
+
+/* Pressed */
+.btn-android:active {
+    transform: scale(.98);
+    background: var(--android-primary-900);
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, .2),
+        0 2px 4px rgba(0, 0, 0, .18);
+}
+
+/* Focus ring acessível (teclado/TV) */
+.btn-android:focus-visible {
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, .18),
+        0 3px 6px rgba(0, 0, 0, .16),
+        0 0 0 4px var(--android-focus);
+}
+
+/* Estado desabilitado */
+.btn-android:disabled,
+.btn-android[aria-disabled="true"] {
+    opacity: .38;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Ícone opcional à esquerda/direita */
+.btn-android>.icon {
+    display: inline-flex;
+    margin-inline-end: 8px;
+    /* use .trailing para o outro lado */
+    line-height: 0;
+}
+
+.btn-android>.icon.trailing {
+    margin-inline-end: 0;
+    margin-inline-start: 8px;
+}
+
+/* Ripple CSS-only (simples) */
+.btn-android::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--r-x, 50%) var(--r-y, 50%), var(--android-ripple), transparent 40%);
+    opacity: 0;
+    transition: opacity .35s ease;
+}
+
+.btn-android:active::after {
+    opacity: 1;
+    transition: opacity .35s ease .05s;
+}
+
+/* Variante: outlined (borda + texto primário) */
+.btn-android--outlined {
+    background: transparent;
+    color: var(--android-primary);
+    border: 1px solid var(--android-outline);
+    box-shadow: none;
+}
+
+.btn-android--outlined:hover {
+    background: rgba(41, 98, 255, .06);
+}
+
+.btn-android--outlined:active {
+    background: rgba(41, 98, 255, .12);
+    transform: scale(.98);
+}
+
+/* Densidade menor (ex.: toolbars) */
+.btn-android--dense {
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+/* Suporte a tema escuro automático */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --android-outline: rgba(255, 255, 255, .16);
+        --android-focus: rgba(41, 98, 255, .36);
+        --android-ripple: rgba(255, 255, 255, .28);
+    }
+
+    .btn-android--outlined {
+        border-color: var(--android-outline);
+    }
+}
