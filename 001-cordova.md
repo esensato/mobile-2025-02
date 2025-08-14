@@ -347,7 +347,7 @@ const jogar = () => {
 
 #### Interface
 
-- Titulo
+- Titulo app
 
 ```
 <div class="titulo">Pizzaria Cordova</div>
@@ -402,7 +402,7 @@ background-repeat: no-repeat;
 background-position: center;
 background-size: cover;
 ```
-### Imagens Externas
+#### Imagens Externas
 
 - Alterar em `index.html` a diretiva de segurança `img-src`:
 
@@ -413,7 +413,7 @@ content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-s
 
 - Formulário do Pedido
 
-```
+```html
 <div class="form-linha">
     <div class="form-linha-esq">Local:</div>
     <div class="form-linha-dir"><input type="text" id="endereco"></div>
@@ -433,7 +433,8 @@ content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-s
     <div class="form-linha-esq">Qtde:</div>
     <div class="form-linha-dir"><select id="qtde"><option value="1">1</option></select></div>
 </div>
-
+```
+```css
 .form-linha {
     display: flex;
     align-items: center;
@@ -453,11 +454,12 @@ content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-s
 
 - Botão Enviar
 
-```
+```html
 <div class="form-linha">
     <button class="enviar" id="enviar">Enviar</button>
 </div>
-
+```
+```css
 .enviar {
     width: 100%;
     padding-top: 10px;
@@ -469,7 +471,7 @@ content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-s
 
 - Criação das variáveis para referenciar os elementos da interface
 
-```
+```javascript
 const itensCardapio = [{pizza: "Calabresa", preco: "R$ 25,00", imagem: "../img/pizza.jpg"},
 {pizza: "Quatro Queijos", preco: "R$ 35,00", imagem: "../img/pizza.jpg"}];
 
@@ -483,7 +485,7 @@ var pizza;
 
 - Referenciar os elementos da interface
 
-```
+```javascript
 endereco = document.getElementById('endereco');
 qtde = document.getElementById('qtde');
 preco = document.getElementById('preco');
@@ -578,8 +580,8 @@ cordova.plugin.http.post('https://pedidos-pizzaria.glitch.me/', {
 - Obter o caradápio dinamicamente efetuando um GET no endpoint e atualizando os dados no app ao invés de utilizar a variável *hardcoded* `itensCardapio`
 
     `https://pedidos-pizzaria.glitch.me/pizzas`
-
-#### Plugins
+***
+### Plugins
 
 - Mecanismos de extensão da plataforma - vide [Referência](https://cordova.apache.org/docs/en/latest/#plugins)
 
