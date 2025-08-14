@@ -340,6 +340,7 @@ const jogar = () => {
 
 }
 ```
+***
 ### App Sistema de Pedidos de Pizza
 
 - Criar um app para efetuar o pedido de pizza
@@ -362,15 +363,17 @@ const jogar = () => {
 }
 ```
 
-- Imagem da Pizza
+- Imagem da Pizza (html)
 
-```
+```html
 <div class="imagem-container">
     <div class="imagem-lateral"><div class="seta" id="esquerda">&lt;&lt;</div></div>
     <div class="imagem" id="imagem"></div>
     <div class="imagem-lateral"><div class="seta" id="direita">&gt;&gt;</div></div></div>    
 </div>
-
+```
+- Folha de estilo para exibir a imagem da pizza
+```css
 .imagem-container {
     display: flex;
     align-items: center;
@@ -391,22 +394,19 @@ const jogar = () => {
     text-align: center;
 }
 ```
-
 - Exibindo as imagens
-
-```
+```css
 background-image: url("../img/pizza.jpg");
 background-color: #cccccc;
 background-repeat: no-repeat;
 background-position: center;
 background-size: cover;
 ```
-
 ### Imagens Externas
 
 - Alterar em `index.html` a diretiva de segurança `img-src`:
 
-```
+```html
 <meta http-equiv="Content-Security-Policy" 
 content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src * data: content:;">
 ```
