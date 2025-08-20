@@ -18,9 +18,8 @@
 ```bash
 mkdir c:\mobile\java
 cd c:\mobile\java 
-curl -LO https://download.java.net/java/ga/jdk11/openjdk-11_windows-x64_bin.zip
-tar -xvf openjdk-11_windows-x64_bin.zip 
-jdk-11\bin\java -version
+curl -LO https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_windows-x64_bin.zip
+tar -xvf openjdk-17.0.2_windows-x64_bin.zip
 
 openjdk version "11" 2018-09-25
 OpenJDK Runtime Environment 18.9 (build 11+28)
