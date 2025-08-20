@@ -342,65 +342,125 @@ const jogar = () => {
 ```
 ***
 ### App Sistema de Pedidos de Pizza
-
 - Criar um app para efetuar o pedido de pizza
-
-#### Interface
-
-- Titulo app
-
-```
-<div class="titulo">Pizzaria Cordova</div>
-
-.titulo {
-    font-size:24px;
-    font-weight: bold;
-    margin:0px;
-    padding-top:10px;
-    padding-bottom:10px;
-    text-align:center;
-    width: 100%;
-}
-```
-
-- Imagem da Pizza (html)
-
+- Interface para exibir o cardápio
 ```html
-<div class="imagem-container">
-    <div class="imagem-lateral"><div class="seta" id="esquerda">&lt;&lt;</div></div>
-    <div class="imagem" id="imagem"></div>
-    <div class="imagem-lateral"><div class="seta" id="direita">&gt;&gt;</div></div></div>    
-</div>
+<body>
+    <div class="container">
+        <div class="cardapio">
+            <button id="btnEsquerda" class="seta esquerda">&#9664;</button>
+            <img id="imagem" src="pizza.png" alt="Pizza" class="pizza-img">
+            <button id="btnDireita" class="seta direita">&#9654;</button>
+        </div>
+
+        <div class="info">
+            <h2 class="pizza-nome" id="pizza">Pizza Margherita</h2>
+            <p class="pizza-preco" id="preco">R$ 39,90</p>
+
+            <label for="qtde">Quantidade:</label>
+            <select id="qtde" class="qtd">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+
+            <button class="btn">Enviar Pedido</button>
+        </div>
+    </div>
+</body>
 ```
-- Folha de estilo para exibir a imagem da pizza
+- Folha de estilo
 ```css
-.imagem-container {
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #fefefe;
     display: flex;
+    justify-content: center;
     align-items: center;
+    height: 100vh;
 }
 
-.imagem-lateral {
-    flex: 1;
+.container {
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
 }
 
-.imagem {
-    flex: 3;
-    border: solid;
-    height: 200px;
+.cardapio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .seta {
-    font-size: 34px;
-    text-align: center;
+  background: none;
+  border: none;
+  color: #ff7043;
+  font-size: 32px;
+  cursor: pointer;
+  padding: 0;
 }
-```
-- Exibindo as imagens
-```css
-background-image: url("../img/pizza.jpg");
-background-color: #cccccc;
-background-repeat: no-repeat;
-background-position: center;
-background-size: cover;
+
+.pizza-img {
+    width: 150px;
+    height: 150px;
+    margin: 0 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    object-fit: cover;
+}
+
+.info {
+    background: #fff8f0;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pizza-nome {
+    margin: 10px 0 5px;
+    color: #d84315;
+}
+
+.pizza-desc {
+    font-size: 14px;
+    color: #555;
+}
+
+.pizza-preco {
+    font-weight: bold;
+    margin: 8px 0;
+    color: #2e7d32;
+}
+
+.qtd {
+    margin: 10px 0;
+    padding: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    background: #ff7043;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background: #e64a19;
+}
 ```
 #### Imagens Externas
 
@@ -410,63 +470,6 @@ background-size: cover;
 <meta http-equiv="Content-Security-Policy" 
 content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src * data: content:;">
 ```
-
-- Formulário do Pedido
-
-```html
-<div class="form-linha">
-    <div class="form-linha-esq">Local:</div>
-    <div class="form-linha-dir"><input type="text" id="endereco"></div>
-</div>
-
-<div class="form-linha">
-    <div class="form-linha-esq">Pizza:</div>
-    <div class="form-linha-dir" id="pizza">Calabresa com Cebola</div>
-</div>
-
-<div class="form-linha">
-    <div class="form-linha-esq">Preço:</div>
-    <div class="form-linha-dir" id="preco">R$ 35,00</div>
-</div>
-
-<div class="form-linha">
-    <div class="form-linha-esq">Qtde:</div>
-    <div class="form-linha-dir"><select id="qtde"><option value="1">1</option></select></div>
-</div>
-```
-```css
-.form-linha {
-    display: flex;
-    align-items: center;
-    margin-top: 10%;
-    margin-left: 5%;
-    margin-right: 5%;
-}
-
-.form-linha-esq {
-    flex: 1;
-}
-
-.form-linha-dir {
-    flex: 5;
-}
-```
-
-- Botão Enviar
-
-```html
-<div class="form-linha">
-    <button class="enviar" id="enviar">Enviar</button>
-</div>
-```
-```css
-.enviar {
-    width: 100%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-```
-
 #### Lógica do Negócio
 
 - Criação das variáveis para referenciar os elementos da interface
@@ -476,33 +479,27 @@ const itensCardapio = [{pizza: "Calabresa", preco: "R$ 25,00", imagem: "../img/p
 {pizza: "Quatro Queijos", preco: "R$ 35,00", imagem: "../img/pizza.jpg"}];
 
 var idItem = 0;
-var endereco;
 var qtde;
 var preco;
 var imagem;
 var pizza;
 ```
-
 - Referenciar os elementos da interface
 
 ```javascript
-endereco = document.getElementById('endereco');
 qtde = document.getElementById('qtde');
 preco = document.getElementById('preco');
 imagem = document.getElementById('imagem');
 pizza = document.getElementById('pizza');
 ```
-
 - Criar uma função para atualizar a interface e chamá-la no `onDeviceReady`
-
 ```javascript
 const atualizarInterface = () => {
     pizza.innerHTML = itensCardapio[idItem].pizza;
     preco.innerHTML = itensCardapio[idItem].preco;
-    imagem.style.backgroundImage = itensCardapio[idItem].imagem;
+    imagem.src = itensCardapio[idItem].imagem;
 }
 ```
-
 - Mover para a direita
 
 ```javascript
@@ -524,7 +521,11 @@ const esquerda = () => {
     atualizarInterface();
 }
 ```
-
+- Atualizar os eventos dos botões para alterar o cardário
+```javascript
+document.getElementById('btnEsquerda').addEventListener('click', esquerda);
+document.getElementById('btnDireita').addEventListener('click', direita);
+```
 - Enviar dados
 
 ```javascript
@@ -571,9 +572,9 @@ cordova.plugin.http.post('https://pedidos-pizzaria.glitch.me/', {
 });
 ```
 - Conferir os pedidos realizados:
-
-    `https://pedidos-pizzaria.glitch.me/`
-
+```bash
+https://pedidos-pizzaria.glitch.me/
+```
 #### Exercícios
 
 - Atuaizar o POST para enviar os dados preenchidos pelo usuário
@@ -847,26 +848,26 @@ cordova.plugin.http.post('https://pedidos-pizzaria.glitch.me/', {
     <script src="js/bootstrap.min.js"></script>
 ```
 - Exemplo utilizando *card* e *pagination*
-    ```html
-    <div class="container">
-    
-        <div class="card mt-4" style="width: 100%;">
-            <img src="img/logo.png" class="card-img-top">
-            <div class="card-body text-center">
-                <h5 class="card-title" id="card-title">Pizza Atum</h5>
-                <p class="card-text" id="card-text">Preço: R$ 55,00</p>
-                <a href="#" class="btn btn-primary" id="adicionar">Adicionar Pedido</a>
-            </div>
+```html
+<div class="container">
+
+    <div class="card mt-4" style="width: 100%;">
+        <img src="img/logo.png" class="card-img-top">
+        <div class="card-body text-center">
+            <h5 class="card-title" id="card-title">Pizza Atum</h5>
+            <p class="card-text" id="card-text">Preço: R$ 55,00</p>
+            <a href="#" class="btn btn-primary" id="adicionar">Adicionar Pedido</a>
         </div>
-    
-        <nav aria-label="Page navigation example" class="mt-4">
-            <ul class="pagination justify-content-center" id="pagination">
-    
-            </ul>
-        </nav>
-    
     </div>
-    ```
+
+    <nav aria-label="Page navigation example" class="mt-4">
+        <ul class="pagination justify-content-center" id="pagination">
+
+        </ul>
+    </nav>
+
+</div>
+```
 - Adicionar itens de paginação dinamicamente
 ```javascript
 function criaPaginacao() {
@@ -888,4 +889,9 @@ $(document).on("click", ".page-link", function (event) {
     $("#card-title").text("Pizza Marguerita");
     $("#card-text").text("R$ 45,00");
 });
+```
+### Build do App
+- Para gerar o arquivo de instalação do app (no caso do *Android* um *apk*)
+```bash
+cordova build android --release -- --packageType=apk
 ```
