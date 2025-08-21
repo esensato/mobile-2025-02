@@ -369,6 +369,8 @@ const jogar = () => {
             <button class="btn">Enviar Pedido</button>
         </div>
     </div>
+    <script src="cordova.js"></script>
+    <script src="js/index.js"></script>
 </body>
 ```
 - Folha de estilo
