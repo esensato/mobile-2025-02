@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="css/index.css">
+    <title>Pedido Pizza</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="cardapio">
+            <button id="btnEsquerda" class="seta esquerda">&#9664;</button>
+            <img id="imagem" src="img/logo.png" alt="Pizza" class="pizza-img">
+            <button id="btnDireita" class="seta direita">&#9654;</button>
+        </div>
+
+        <div class="info">
+            <h2 class="pizza-nome" id="pizza">Pizza Margherita</h2>
+            <p class="pizza-preco" id="preco">R$ 39,90</p>
+
+            <label for="qtde">Quantidade:</label>
+            <select id="qtde" class="qtd">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+
+            <button class="btn" id="btnEnviar">Enviar Pedido</button>
+        </div>
+    </div>
+    <script src="cordova.js"></script>
+    <script src="js/index.js"></script>
+</body>
+
+</html>
