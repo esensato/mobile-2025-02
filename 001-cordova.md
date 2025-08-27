@@ -550,7 +550,7 @@ content="default-src * data: https://ssl.gstatic.com 'unsafe-eval'; style-src 's
 
 ```javascript
 const request = () => {
-    cordova.plugin.http.get('https://pedidos-pizzaria.glitch.me/ping', {
+    cordova.plugin.http.get('https://backend-s0hl.onrender.com/ping', {
 }, {}, function(response) {
   // para converter a resposta em JSON
   console.log(JSON.parse(response.data));
@@ -564,7 +564,7 @@ const request = () => {
 - Executando **POST**
 ```javascript
 cordova.plugin.http.setDataSerializer('json');
-cordova.plugin.http.post('https://pedidos-pizzaria.glitch.me/', {
+cordova.plugin.http.post('https://backend-s0hl.onrender.com/', {
   pizza: "Atum com Queijo", quantidade: 1, endereco: "Rua das Rosas, 123"
 }, {}, function(response) {
   alert(response.status);
@@ -574,14 +574,14 @@ cordova.plugin.http.post('https://pedidos-pizzaria.glitch.me/', {
 ```
 - Conferir os pedidos realizados:
 ```bash
-https://pedidos-pizzaria.glitch.me/
+https://backend-s0hl.onrender.com/
 ```
 #### Exercícios
 
 - Atuaizar o POST para enviar os dados preenchidos pelo usuário
 - Obter o caradápio dinamicamente efetuando um GET no endpoint e atualizando os dados no app ao invés de utilizar a variável *hardcoded* `itensCardapio`
 
-    `https://pedidos-pizzaria.glitch.me/pizzas`
+    `https://backend-s0hl.onrender.com/pizzas`
 ***
 ### Plugins
 
@@ -815,7 +815,7 @@ https://pedidos-pizzaria.glitch.me/
     const enviarFoto = (dadoImagem) => {
 
     cordova.plugin.http.setDataSerializer('json');
-    cordova.plugin.http.post('https://pedidos-pizzaria.glitch.me/imagem', {
+    cordova.plugin.http.post('https://backend-s0hl.onrender.com/imagem', {
     imagem: dadoImagem
     }, {}, function(response) {
     alert(response.status);
@@ -824,7 +824,7 @@ https://pedidos-pizzaria.glitch.me/
     });
     }
     ```
-- Conferir as imagens em `https://pedidos-pizzaria.glitch.me/imagem`
+- Conferir as imagens em `https://backend-s0hl.onrender.com/imagem`
 
 #### Splash Screen
 - Incluir as configurações abaixo no `config.xml`
