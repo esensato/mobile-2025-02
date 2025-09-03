@@ -580,8 +580,9 @@ https://backend-s0hl.onrender.com/
 
 - Atuaizar o POST para enviar os dados preenchidos pelo usuário
 - Obter o caradápio dinamicamente efetuando um GET no endpoint e atualizando os dados no app ao invés de utilizar a variável *hardcoded* `itensCardapio`
-
-    `https://backend-s0hl.onrender.com/pizzas`
+```bash
+https://backend-s0hl.onrender.com/pizzas
+```
 ***
 ### Plugins
 
@@ -735,95 +736,89 @@ https://backend-s0hl.onrender.com/
     `cordova platform add android`
 
 - CSS
+```css
+body {
+    -webkit-touch-callout: none;
+    -webkit-text-size-adjust: none;
+    background-color:#E4E4E4;
+    font-family: system-ui, -apple-system, -apple-system-font, 'Segoe UI', 'Roboto', sans-serif;
+    font-size:12px;
+    height:100vh;
+    margin:0px;
+    padding:0px;
+    padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+    width:100%;
+}
 
-    ```css
-    body {
-        -webkit-touch-callout: none;
-        -webkit-text-size-adjust: none;
-        background-color:#E4E4E4;
-        font-family: system-ui, -apple-system, -apple-system-font, 'Segoe UI', 'Roboto', sans-serif;
-        font-size:12px;
-        height:100vh;
-        margin:0px;
-        padding:0px;
-        padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
-        width:100%;
-    }
+.app {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    width:99%;
+    height: 95%
+}
 
-    .app {
-        margin-top: 10px;
-        display: flex;
-        flex-direction: column;
-        width:99%;
-        height: 95%
-    }
+.preview {
+    flex: 5;
+    border: solid;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
 
-    .preview {
-        flex: 5;
-        border: solid;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-    }
+.botao {
+    flex: 1;
 
-    .botao {
-        flex: 1;
+}
 
-    }
-
-    .tirar {
-        width: 100%;
-        padding: 10px;
-        margin-top: 10px;
-        font-size: 20px;
-    }
-    ```
-
+.tirar {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 20px;
+}
+```
 - Incluir um botão para acionar a câmera e o local para exibir a imagem
-
-    ```html
-    <div class="app">
-        <div class="preview" id="preview"></div>
-        <div class="botao"><button class="tirar" id="tirarfoto">Tirar Foto</button></div>
-    </div>
-    ```
-
+```html
+<div class="app">
+    <div class="preview" id="preview"></div>
+    <div class="botao"><button class="tirar" id="tirarfoto">Tirar Foto</button></div>
+</div>
+```
 - Registrar o evento de `click` no botão que vai acionar a câmera
-
-    ```javascript
-    document.getElementById('tirarfoto').addEventListener('click', tirarFoto);
-    ```
-
+```javascript
+document.getElementById('tirarfoto').addEventListener('click', tirarFoto);
+```
 - Definir a função para efetuar a captura da imagem e exibir no `preview`
-    ```javascript
-    const tirarFoto = () => {
-        navigator.camera.getPicture(onSuccess, onFail, {  
-            quality: 50, 
-            destinationType: Camera.DestinationType.DATA_URL 
-        });  
-        
-        function onSuccess(imageData) { 
-            document.getElementById('preview').style.backgroundImage = "url('" + imageData + "')"; 
-        }  
-        
-        function onFail(message) { 
-            alert('Failed because: ' + message); 
-        } 
-    ```
+```javascript
+const tirarFoto = () => {
+    navigator.camera.getPicture(onSuccess, onFail, {  
+        quality: 50, 
+        destinationType: Camera.DestinationType.DATA_URL 
+    });  
+    
+    function onSuccess(imageData) { 
+        document.getElementById('preview').style.backgroundImage = "url('" + imageData + "')"; 
+    }  
+    
+    function onFail(message) { 
+        alert('Failed because: ' + message); 
+    } 
+```
 - Exemplo para envio a um endpoint via POST:
-    ```javascript
-    const enviarFoto = (dadoImagem) => {
+```javascript
+const enviarFoto = (dadoImagem) => {
 
-    cordova.plugin.http.setDataSerializer('json');
-    cordova.plugin.http.post('https://backend-s0hl.onrender.com/imagem', {
-    imagem: dadoImagem
-    }, {}, function(response) {
-    alert(response.status);
-    }, function(response) {
-    alert(response.error);
-    });
-    }
-    ```
+cordova.plugin.http.setDataSerializer('json');
+cordova.plugin.http.post('https://backend-s0hl.onrender.com/imagem', {
+imagem: dadoImagem
+}, {}, function(response) {
+alert(response.status);
+}, function(response) {
+alert(response.error);
+});
+}
+```
 - Conferir as imagens em `https://backend-s0hl.onrender.com/imagem`
 
 #### Splash Screen
@@ -836,9 +831,16 @@ https://backend-s0hl.onrender.com/
 <preference name="SplashScreenDelay" value="3000" />
 ```
 #### Integração com Bootstrap e JQuery
-
+- Criar um novo projeto para teste
+```bash
+cordova create bootstrap-jquery bootstrap.jquery BootstrapJQuery
+cd bootstrap-jquery
+cordova platform add android
+```
 - Efetuar o [Download do bootstrap](https://getbootstrap.com/docs/4.3/getting-started/download/)
 - Efetuar o [Download do jquery](https://jquery.com/download/)
+- Exemplos de [Componentes Bootstrap](https://getbootstrap.com/docs/5.3/examples/#snippets)
+- Copiar os arquivos do `jquery` e `bootstrap` para a pasta `js` e `css` do projeto
 - Alterar o `index.html` para incluir os arquivos no *head* e no final antes do `</body>`
 ```javascript
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -857,7 +859,7 @@ https://backend-s0hl.onrender.com/
         <div class="card-body text-center">
             <h5 class="card-title" id="card-title">Pizza Atum</h5>
             <p class="card-text" id="card-text">Preço: R$ 55,00</p>
-            <a href="#" class="btn btn-primary" id="adicionar">Adicionar Pedido</a>
+            <a href="#" class="btn btn-primary rounded-pill" id="adicionar">Adicionar Pedido</a>
         </div>
     </div>
 
@@ -890,6 +892,7 @@ $(document).on("click", ".page-link", function (event) {
     $("#card-title").text("Pizza Marguerita");
     $("#card-text").text("R$ 45,00");
 });
+criaPaginacao();
 ```
 ### Build do App
 - Para gerar o arquivo de instalação do app (no caso do *Android* um *apk*)
