@@ -820,16 +820,6 @@ alert(response.error);
 }
 ```
 - Conferir as imagens em `https://backend-s0hl.onrender.com/imagem`
-
-#### Splash Screen
-- Incluir as configurações abaixo no `config.xml`
-```xml
-<platform name="android">
-    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/pizzaria.png" />
-</platform>
-
-<preference name="SplashScreenDelay" value="3000" />
-```
 #### Integração com Bootstrap e JQuery
 - Criar um novo projeto para teste
 ```bash
