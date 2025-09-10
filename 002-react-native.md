@@ -1,4 +1,4 @@
-## React Native - Aula 01
+## React Native
 
 - [NodeJs Download](https://nodejs.org/en/download)
 - [React Native](https://reactnative.dev/)
@@ -24,10 +24,10 @@
     - import
     - código
     - estilos
-- Função `App()`indica o ponto de entrada do app
+- Função `Index()`indica o ponto de entrada do app
 - O retorno desta função deve representar o desenho da interface de usuário que será convertida para eleentos nativos na plataforma específica (ios, android, web, etc...)
     ```javascript
-    export default function App() {
+    export default function Index() {
         return null;
     }
     ```
@@ -144,7 +144,7 @@
   ```
 - Criar um manipulador para o texto inserido:
   ```javascript
-  const descricaoGastoHandler = (texto) => {
+  const descricaoGastoHandler = (texto: string) => {
     console.log(texto);
     onChangeDescricaoGasto(texto);
   }
@@ -157,16 +157,29 @@
              placeholder="Descrição do Gasto"/>
   ```
 - Definir o estilo (`width: "100%"` para ocupar a largura disponível):
-  ```css
-  input: {
-    height: 40,
-    margin: 12,
-    width: 300,
+```json
+input: {
+    height: 50,
+    width: "90%",
+    marginVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 10,
     borderWidth: 1,
-    padding: 10,
-    borderRadius: 5
+    borderColor: "#ccc",
+    backgroundColor: "#f9f9f9",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    fontSize: 16,
+    color: "#333",
   },
-  ```
+  inputFocused: {
+    borderColor: "#4A90E2",
+    backgroundColor: "#fff",
+  },
+```
 - [Gerador Shadow](https://10015.io/tools/react-native-shadow-generator)
 ***
 #### Exibindo o Texto Digitado
@@ -199,41 +212,138 @@
     <Button title='Incrementar' onPress={incrementarValor} />
   </View>
   ```
-- Outra opção é utilizar o `<TouchableOpacity>`
-  ```javascript
-  <TouchableOpacity style={{ backgroundColor: "#ABAB", height: 50 }}>
-      <Text>Clique Aqui</Text>
-  </TouchableOpacity>
-  ```
+- Uma melhor abordagem ao `<Button>` é utilizar o `<Pressable>`
+```javascript
+<Pressable style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
+  onPress={addDescricaoGastoHandler} >
+  <Text style={styles.buttonText}>Adicionar</Text>
+</Pressable>
+```
+- Explicação para o `({ pressed }) => [styles.button, pressed && styles.buttonPressed]`:
+    - `pressed`: indica se o botão foi pressionado (`true`) ou não (`false`)
+    - `[styles.button, pressed && styles.buttonPressed]`: é uma combinação de estilos (permitido pelo **React Native**)
+- Com o estilo abaixo
+```json
+button: {
+  backgroundColor: "#4A90E2",
+  paddingVertical: 14,
+  paddingHorizontal: 25,
+  borderRadius: 10,
+  alignItems: "center",
+  justifyContent: "center",
+  shadowColor: "#000",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.15,
+  shadowRadius: 3.5,
+  elevation: 3,
+  marginVertical: 10,
+  width: "90%",
+},
+buttonText: {
+  color: "#fff",
+  fontSize: 16,
+  fontWeight: "600",
+},
+buttonPressed: {
+  backgroundColor: "#357ABD"
+}
+```
+- Existe também o `<TouchableOpacity>` que é mais antigo que o `<Pressable>`
+```javascript
+<TouchableOpacity style={styles.button}
+  activeOpacity={0.7}
+  onPress={addDescricaoGastoHandler} >
+  <Text style={styles.buttonText}>Entrar</Text>
+</TouchableOpacity>
+```
+***
+#### Ajustando o Layout
+- Organizar os layout da aplicação utilizando `<View>`
+```javascript
+<View style={styles.container}>
+    {/* Área superior: input + botão */}
+    <View style={styles.topSection}>
+
+    </View>
+
+    {/* Área inferior: lista de gastos */}
+    <View style={styles.listSection}>
+        <Text style={styles.listPlaceholder}>A lista de gastos aparecerá aqui...</Text>
+    </View>
+</View>
+```
+- As folhas de estilos para cada uma das sessões é definda abaixo
+```json
+container: {
+  flex: 1,
+  backgroundColor: "#fff",
+  padding: 20,
+},
+topSection: {
+  marginTop: 20,
+  marginBottom: 15,
+  alignItems: "center",
+},
+listSection: {
+  flex: 1,
+  marginTop: 20,
+  backgroundColor: "#f4f6f8",
+  borderRadius: 12,
+  padding: 15,
+},
+listPlaceholder: {
+  color: "#666",
+  fontSize: 14,
+  fontStyle: "italic",
+  textAlign: "center",
+  marginTop: 20,
+},
+```
+***
+### SafeAreaView e StatusBar
+- Delimita a região visível da aplicação e uma barra de status
+```javascript
+<SafeAreaView style={styles.safeArea}>
+  <StatusBar />
+  {/* Os demais componentes vão aqui */}
+</SafeAreaView>
+```
+- Observação: importar de `import { SafeAreaView } from "react-native-safe-area-context";`
+- Definir o estilo para o `SafeAreaView`
+```json
+safeArea: {
+  flex: 1,
+  backgroundColor: "#fff", // mantém cor uniforme
+},
+```
 ***
 #### Armazenar Gastos em Uma Lista
 - **Nota:** como concatenar *arrays* em *Javascript* utilizando **spread** (`...`)
-    ```javascript
-    const letras = ["A", "B", "C"];
-    const maisLetras = [letras, "D"];
-    console.log(maisLetras);
-    ```
+```javascript
+const letras = ["A", "B", "C"];
+const maisLetras = [letras, "D"];
+console.log(maisLetras);
+```
 - Resultado: `[["A", "B", "C"], "D"]` - um *array* dentro de outro
-    ```javascript
-    console.log(...letras)
-    ```
+```javascript
+console.log(...letras)
+```
 - Concatenação com o **spread** (`...`):
-    ```javascript
-    const maisLetras = [...letras, "D"];
-    console.log(maisLetras)
-    ```
+```javascript
+const maisLetras = [...letras, "D"];
+console.log(maisLetras)
+```
 - **Nota:** utilizando `map` para percorrer elementos de um *array*
-    ```javascript
-    maisLetras.map((item) => console.log(item))
-    ```
+```javascript
+maisLetras.map((item) => console.log(item))
+```
 - Criar uma variável de estado para armazenar a lista de gastos:
-    ```javascript
-    const [listaGastos, setListaGastos] = useState([]);
-    ```
+```javascript
+  const [listaGastos, setListaGastos] = useState<string[]>([]);
+```
 - Alterar a função acionada quando o botão é pressionado:
   ```javascript
   const addDescricaoGastoHandler  = () => {
-
     setListaGastos((gastosAtuais) => {
       console.log([...gastosAtuais, descricaoGasto]);
       return [...gastosAtuais, descricaoGasto];
@@ -246,6 +356,33 @@
 {listaGastos.map((gasto) => <Text key={gasto}>{gasto}</Text>)}
 ```
 ***
+### Trabalhando com Classes Typescript
+- Criar uma classe para representar os gastos que serão instanciados
+```javascript
+type Gasto = { id: number, descricao: string, valor: number };
+```
+- Alterar a variável de estado
+```javascript
+const [listaGastos, setListaGastos] = useState<Gasto[]>([]);
+```
+- Ajustar a inclusão de um novo gasto na lista
+```javascript
+const addDescricaoGastoHandler = () => {
+  const gasto: Gasto = {
+    id: Date.now(),
+    descricao: descricaoGasto,
+    valor: 0.0,
+  };
+
+  const novoGasto = [...listaGastos, gasto];
+  setListaGastos(novoGasto);
+}
+```
+- Alterar a forma de exibir os itens registrados até o momento na lista
+```javascript
+{listaGastos.map((gasto) => <Text key={gasto.id}>{gasto.descricao}</Text>)}
+```
+***
 ### FlexBox
 - Permite distribuir os componentes visuais proporcionalmente na área de visualização
 - A propriedade `flexDirecion` define como os componentes dentro da `<View>` serão distribuídos
@@ -254,74 +391,12 @@
 - Cada componente dentro da `<View>` tem uma propriedade `flex` para indicar o quanto de espaço irá ocupar
 - No exemplo baixo, 1 + 4 = 5, então **Item 1** irá ocupar 1/5 do espaço horizontal
 - Já o **Item 2** irá ocupar 4/5
-  ```javascript
-  <View style={{marginTop: 50, flexDirection:'row'}}>
-      <Text style={{flex: 1, borderColor: 'red', borderWidth: 1}}>Item 1</Text>
-      <Text style={{flex: 4, borderColor: 'red', borderWidth: 1}}>Item 2</Text>
-  </View>
-  ```
-***
-### SafeAreaView e StatusBar
-
-- Delimita a região visível da aplicação e uma barra de status
 ```javascript
-    <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar />
-    </SafeAreaView>
+<View style={{marginTop: 50, flexDirection:'row'}}>
+    <Text style={{flex: 1, borderColor: 'red', borderWidth: 1}}>Item 1</Text>
+    <Text style={{flex: 4, borderColor: 'red', borderWidth: 1}}>Item 2</Text>
+</View>
 ```
-***
-
-- Para evitar que o teclado influencie no layout basta utilizar o componente `<KeyboardAvoidingView behavior="height">`
-#### Ajustando o Layout Atual
-- Efetuar a refatoração dos elementos adicionando os estilos e aplicando o **flex**
-    ```javascript
-    return <View style={styles.container}>
-                <TextInput style={styles.input} 
-                value={descricaoGasto} 
-                onChangeText={descricaoGastoHandler}
-                placeholder="Descrição do Gasto"/>
-                <Button style={styles.button} title="Adicionar" 
-                onPress={addDescricaoGastoHandler}/>
-                <View style={styles.lista}>
-                {listaGastos.map((gasto) => <Text key={gasto}>{gasto}</Text>)}
-                </View>
-            </View>
-    }
-    ```
-- Estilos:
-    ```javascript
-    const styles = StyleSheet.create({
-    container: {
-        flex: 1, // ocupa toda a dimensão vertical
-        marginTop: '10%',
-        borderWidth: 5,
-        borderColor: 'red'
-    },
-    input: {
-        margin: 12,
-        flex: 1,
-        borderWidth: 1,
-        padding: 10,
-    },
-    button: {
-        flex: 1
-    },
-    lista: {
-        flex: 20,
-        margin: 10
-    }
-    ```
-- Colocar o `<Button>` ao lado do `<TextInput>`
-- Utilizar `<View>` para criar agrupamento dos componentes visuais do app
-    ```javascript
-    <View style={{marginRight: 10, flexDirection: 'row', alignItems: 'center'}}>
-    <TextInput style={styles.input} 
-    value={descricaoGasto} 
-    onChangeText={descricaoGastoHandler}
-    placeholder="Descrição do Gasto"/>
-    <Button style={styles.button} title="Adicionar" onPress={addDescricaoGastoHandler}/>
-    </View>
-    ```
 ***
 #### `<Image>`
 - Importar `import { Image } from 'react-native';`
@@ -338,39 +413,73 @@
 ***
 #### Exibir Gastos na FlatList
 - Para organizar o código, criar uma função que retorna o item a ser exibido em cada linha da lista
-    ```javascript
-  const renderGasto = (item, index) => {
-    return <Text style={styles.item}>{item}</Text>;
-  }
-    ```
+```javascript
+const renderGasto = ({ item }: { item: Gasto }) => {
+  return (
+    <View style={styles.gastoCard}>
+      <Image source={require("./assets/001-coin.png")} style={styles.gastoIcon}/>
+      <Text style={styles.gastoDescricao}>{item.descricao}</Text>
+      <Text style={styles.gastoValor}>R$ {item.valor.toFixed(2)}</Text>
+    </View>
+  );
+};
+```
 - Referenciar a função `renderGasto` para exibir o item de gasto adicionado
-    ```javascript
-    <FlatList
-        data={listaGastos} 
-        renderItem={({item, index}) => renderGasto(item, index)}
-        keyExtractor={idx => idx} />
-    ```
-- Definir o estilo para cada item:
-    ```css
-    item: {
-        height: 40,
-        marginLeft: 10,
-        textAlignVertical: 'center'
-    }
-    ```
-- Obtendo o item selecionado com `onPress`
-    ```javascript
-    const removerGasto = idx => {
-        let removerGasto = [...listaGastos];
-        removerGasto.splice(idx,1);
-        addListaGastos(removerGasto);
-    };
+```javascript
+<FlatList
+  data={listaGastos}
+  renderItem={renderGasto}
+  keyExtractor={(item) => item.id.toString()}
+  contentContainerStyle={{ paddingBottom: 20 }} />
+```
+- Definir os estilos para cada item:
+```json
+gastoCard: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  padding: 15,
+  marginVertical: 6,
+  marginHorizontal: 10,
+  backgroundColor: "#fff",
+  borderRadius: 12,
+  shadowColor: "#000",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 3,
+  elevation: 3,
+},
+gastoDescricao: {
+  fontSize: 16,
+  fontWeight: "500",
+  color: "#333",
+},
+gastoValor: {
+  fontSize: 16,
+  fontWeight: "700",
+  color: "#4A90E2",
+},
+gastoIcon: {
+  width: 28,
+  height: 28,
+  marginRight: 10,
+  resizeMode: "contain",
+},
 
-    const renderGasto = (item, index) => {
-        return <Text onPress={()=>removerGasto(index)} 
-                    style={styles.item}>{item}</Text>;
-    }
-    ```
+```
+- Obtendo o item selecionado com `onPress`
+```javascript
+const removerGasto = idx => {
+    let removerGasto = [...listaGastos];
+    removerGasto.splice(idx,1);
+    addListaGastos(removerGasto);
+};
+
+const renderGasto = (item, index) => {
+    return <Text onPress={()=>removerGasto(index)} 
+                style={styles.item}>{item}</Text>;
+}
+```
 #### Funções como Componentes React
 - A função `renderGasto` deve ter o nome trocado para `RenderGasto`
 - Os parâmetros devem ser encapsulados em um único parâmetro `props`
@@ -391,7 +500,6 @@
  #### Melhorando o componente `RenderGasto`
  - Incluindo uma `View` e estilo
     - `borderRadius`: arredondamento dos cantos do componente
-
  ```css
    itemgasto: {
     margin: 8,
@@ -411,58 +519,46 @@
   }
   ```
 ***
-### `<Pressable>`
-- Uma outra forma de permitir que um componente seja pressionado pelo usuário é utilizando o componente `<Pressable>` ao invés de utilizar a propriedade `onPress` diretamente em um componente visual (como no caso do `<Text>`)
-  ```javascript
-    const RenderGasto = (props) => {
-    return <Pressable onPress={()=>removerGasto(props.index)}>
-      <View style={styles.itemgasto}>
-      <Text style={styles.item}>{props.item}</Text>
-      </View>
-      </Pressable>;
-  }
-  ```
-***
 #### FlatList com Drag and Drop
 - Instalar o pacote `npm install --save react-native-draglist` - [react-native-draglist](https://github.com/fivecar/react-native-draglist)
 - Importar o componente `import DragList, { DragListRenderItemInfo } from 'react-native-draglist';`
 - Criar uma função para formatar os itens da lista
-    ```javascript
-    const renderItem = (info: any) => {
-      const { item, onDragStart, onDragEnd, isActive } = info;
-  
-      return (
-        <TouchableOpacity
-          style={{ padding: 10, backgroundColor: "#CACA" }}
-          key={item}
-          onPressIn={onDragStart}
-          onPressOut={onDragEnd}>
-          <Text>{item.descricao}</Text>
-        </TouchableOpacity>
-      );
-    }
-    ```
+```javascript
+const renderItem = (info: DragListRenderItemInfo<Gasto>) => {
+  const { item, onDragStart, onDragEnd, isActive } = info;
+
+  return (
+    <TouchableOpacity
+      style={{ padding: 10, backgroundColor: "#CACA" }}
+      key={item}
+      onPressIn={onDragStart}
+      onPressOut={onDragEnd}>
+      <Text>{item.descricao}</Text>
+    </TouchableOpacity>
+  );
+}
+```
 - Criar uma função para reorganizar os componentes da lista quando os itens forem reposicionados
-    ```javascript
-    const onReordered = async (fromIndex: number, toIndex: number) => {
-    
-      console.log(fromIndex, toIndex)
-      const copy = [...gastos]; // Don't modify react data in-place
-      const removed = copy.splice(fromIndex, 1);
-    
-      copy.splice(toIndex, 0, removed[0]); // Now insert at the new pos
-      addGasto(copy);
-    }
-    ```
+```javascript
+const onReordered = async (fromIndex: number, toIndex: number) => {
+
+  console.log(fromIndex, toIndex)
+  const copy = [...gastos];
+  const removed = copy.splice(fromIndex, 1);
+
+  copy.splice(toIndex, 0, removed[0]);
+  addGasto(copy);
+}
+```
 - Implementar o componente `DragList`
-    ```javascript
-    <DragList
-      data={gastos}
-      keyExtractor={(item) => item.id}
-      onReordered={onReordered}
-      renderItem={renderItem}
-    />
-    ```
+```javascript
+<DragList
+  data={gastos}
+  keyExtractor={(item) => item.id}
+  onReordered={onReordered}
+  renderItem={renderItem}
+/>
+```
 ***
 ### Organizando os Componentes
 - Criar uma pasta `components` dentro do projeto
@@ -500,7 +596,6 @@
 
 - **Problema:** como acionar uma função que não está definida no componente `RenderGasto` para remover um item da lista (gasto)?
 - **Solução:** passar uma função como parâmetro (*callback*) assim como `item` e `index` dentro de `props` e acioná-la dentro de `onPress`
-
   ```javascript
   const RenderGasto = (props) => {
       return <Pressable onPress={() => props.onRemoverGasto(props.index)}>
@@ -515,15 +610,15 @@
 ## Exercícios
 - Transformar o `<TextInput>` e o `<Button>` onde o gasto é adicionado na lista em um componente chamado `RenderEntradaGasto`;
 - Criar um componente `TelaPrincipal`, transferir o conteúdo de `App` para ele e ajustar o `App` para conter apenas a referência ao novo componente criado:
-  ```javascript
-  import TelaPrincipal from './components/TelaPrincipal';
+```javascript
+import TelaPrincipal from './components/TelaPrincipal';
 
-  export default function App() {
+export default function App() {
 
-    return <TelaPrincipal />
+  return <TelaPrincipal />
 
-  }
-  ```
+}
+```
 - Adicionar os campos **Valor** e **Total** no app de Controle de Gastos conforme abaixo:
 - <img src="./img/ex-1.png" width="300" height="150">
 - No componente `RenderEntradaGasto` criado:
