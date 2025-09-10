@@ -157,7 +157,7 @@
              placeholder="Descrição do Gasto"/>
   ```
 - Definir o estilo (`width: "100%"` para ocupar a largura disponível):
-```json
+```css
 input: {
     height: 50,
     width: "90%",
@@ -223,7 +223,7 @@ input: {
     - `pressed`: indica se o botão foi pressionado (`true`) ou não (`false`)
     - `[styles.button, pressed && styles.buttonPressed]`: é uma combinação de estilos (permitido pelo **React Native**)
 - Com o estilo abaixo
-```json
+```css
 button: {
   backgroundColor: "#4A90E2",
   paddingVertical: 14,
@@ -273,7 +273,7 @@ buttonPressed: {
 </View>
 ```
 - As folhas de estilos para cada uma das sessões é definda abaixo
-```json
+```css
 container: {
   flex: 1,
   backgroundColor: "#fff",
@@ -310,7 +310,7 @@ listPlaceholder: {
 ```
 - Observação: importar de `import { SafeAreaView } from "react-native-safe-area-context";`
 - Definir o estilo para o `SafeAreaView`
-```json
+```css
 safeArea: {
   flex: 1,
   backgroundColor: "#fff", // mantém cor uniforme
@@ -433,7 +433,7 @@ const renderGasto = ({ item }: { item: Gasto }) => {
   contentContainerStyle={{ paddingBottom: 20 }} />
 ```
 - Definir os estilos para cada item:
-```json
+```css
 gastoCard: {
   flexDirection: "row",
   justifyContent: "space-between",
@@ -905,7 +905,7 @@ const styles = StyleSheet.create({
     - Obter o [projectId](https://expo.dev/login)
     - [Expo Push Notifications Tool](https://expo.dev/notifications)
     - O *projectId* deve ser colocado dentro do arquivo `app.json`
-    ```json
+    ```css
     "extra": {
       "projectId": "ID"
     }
