@@ -184,9 +184,9 @@ input: {
 ***
 #### Exibindo o Texto Digitado
 - Criar o `<Text>`:
-  ```
-  <Text>{descricaoGasto}</Text>
-  ```
+```javascript
+<Text>{descricaoGasto}</Text>
+```
 #### `<Button>`
 - Importar `import { Button } from 'react-native';`
 - Botão que pode ser pressionado
@@ -414,7 +414,7 @@ const addDescricaoGastoHandler = () => {
 #### Exibir Gastos na FlatList
 - Para organizar o código, criar uma função que retorna o item a ser exibido em cada linha da lista
 ```javascript
-const renderGasto = ({ item }: { item: Gasto }) => {
+const renderGasto = ({ item, index }: { item: Gasto, index: number }) => {
   return (
     <View style={styles.gastoCard}>
       <Image source={require("./assets/001-coin.png")} style={styles.gastoIcon}/>
@@ -469,55 +469,48 @@ gastoIcon: {
 ```
 - Obtendo o item selecionado com `onPress`
 ```javascript
-const removerGasto = idx => {
-    let removerGasto = [...listaGastos];
-    removerGasto.splice(idx,1);
-    addListaGastos(removerGasto);
+const removerGasto = (idx: number) => {
+  let removerGasto = [...listaGastos];
+  removerGasto.splice(idx, 1);
+  setListaGastos(removerGasto);
 };
 
-const renderGasto = (item, index) => {
-    return <Text onPress={()=>removerGasto(index)} 
-                style={styles.item}>{item}</Text>;
-}
+const renderGasto = ({ item, index }: { item: Gasto, index: number }) => {
+  return (
+    <Pressable onPress={() => { removerGasto(index) }}>
+      <View style={styles.gastoCard}>
+        <Image source={require("../assets/images/001-coin.png")} style={styles.gastoIcon} />
+        <Text style={styles.gastoDescricao}>{item.descricao}</Text>
+        <Text style={styles.gastoValor}>R$ {item.valor.toFixed(2)}</Text>
+      </View>
+    </Pressable>
+  );
+};
 ```
 #### Funções como Componentes React
 - A função `renderGasto` deve ter o nome trocado para `RenderGasto`
 - Os parâmetros devem ser encapsulados em um único parâmetro `props`
 - As propriedades são obtidas de `props` como `props.index` e `props.item`
-  ```javascript
-    const RenderGasto = (props) => {
-      return <Text onPress={()=>removerGasto(props.index)} 
-                  style={styles.item}>{props.item}</Text>;
-    }
-  ```
+```javascript
+const RenderGasto = (props: any) => {
+  return (
+    <Pressable onPress={() => { removerGasto(props.index) }}>
+      <View style={styles.gastoCard}>
+        <Image source={require("../assets/images/001-coin.png")} style={styles.gastoIcon} />
+        <Text style={styles.gastoDescricao}>{props.item.descricao}</Text>
+        <Text style={styles.gastoValor}>R$ {props.item.valor.toFixed(2)}</Text>
+      </View>
+    </Pressable>
+  );
+};
+```
 - Para acionar a função agora encapsulada em um componente:
-  ```javascript
-  <FlatList
-    data={listaGastos} 
-    renderItem={({item, index}) => <RenderGasto index={index} item={item}/>}
-    keyExtractor={idx => idx} />
-  ```
- #### Melhorando o componente `RenderGasto`
- - Incluindo uma `View` e estilo
-    - `borderRadius`: arredondamento dos cantos do componente
- ```css
-   itemgasto: {
-    margin: 8,
-    padding: 8,
-    borderRadius: 6,
-    backgroundColor: '#88ff'
-  },
- ```
- - Criar uma `<View>` englobando `<Text>` com o estilo `itemgasto` aplicado
-
- ```javascript
-   const RenderGasto = (props) => {
-    return <View style={styles.itemgasto}>
-      <Text onPress={()=>removerGasto(props.index)} 
-                 style={styles.item}>{props.item}</Text>
-      </View>;
-  }
-  ```
+```javascript
+<FlatList
+  data={listaGastos} 
+  renderItem={({item, index}) => <RenderGasto index={index} item={item}/>}
+  keyExtractor={idx => idx} />
+```
 ***
 #### FlatList com Drag and Drop
 - Instalar o pacote `npm install --save react-native-draglist` - [react-native-draglist](https://github.com/fivecar/react-native-draglist)
