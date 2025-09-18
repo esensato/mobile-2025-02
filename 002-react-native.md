@@ -404,6 +404,7 @@ const addDescricaoGastoHandler = () => {
 - Os arquivos de imagem podem ser armazenados dentro da pasta `assets`
 - Exemplo (copiar o arquivo `001-coin.png` para a pasta `assets`):
 `<Image source={require('../assets/001-coin.png')}/>`
+- A imagem acima pode ser obtida [aqui](https://github.com/esensato/mobile-2025-02/blob/main/img/001-coin.png)
 ***
 #### `<FlatList>`
 - Exibe uma lista de itens de forma otimizada:
