@@ -685,8 +685,6 @@ const styles = StyleSheet.create({
   - Alterar o layout para permitir a entrada do valor do gasto
   - Criar uma nova variável de estado para armazenar o valor do gasto inserido (semelhante ao que foi feito para a descrição do gasto)
 - Adicionar o valor do gasto em cada gasto inserido na lista
-- Inserir uma imagem (ícone de moeda, por exemplo) na linha do gasto
-  `<Image source={require('../assets/001-coin.png')}/>`
 - Ao inserir ou remover um gasto, atualizar o total de despesas no campo **Total** (somente leitura)
 - Utilizar `<Modal>` para exibir uma janela para avisar que o total de gastos ultrapassou R$ 1.000,00
 ***
