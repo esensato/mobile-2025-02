@@ -2,37 +2,7 @@
 import { StyleSheet } from "react-native";
 
 export const estilo = StyleSheet.create({
-    gastoCard: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: 15,
-        marginVertical: 6,
-        marginHorizontal: 10,
-        backgroundColor: "#fff",
-        borderRadius: 12,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-        elevation: 3,
-    },
-    gastoDescricao: {
-        fontSize: 16,
-        fontWeight: "500",
-        color: "#333",
-    },
-    gastoValor: {
-        fontSize: 16,
-        fontWeight: "700",
-        color: "#4A90E2",
-    },
-    gastoIcon: {
-        width: 28,
-        height: 28,
-        marginRight: 10,
-        resizeMode: "contain",
-    },
+
     container: {
         flex: 1, // ocupa toda a dimensão vertical
         padding: 10
@@ -86,13 +56,6 @@ export const estilo = StyleSheet.create({
     },
     topSection: {
         alignItems: "center",
-    },
-    listSection: {
-        flex: 1,
-        marginTop: 10,
-        backgroundColor: "#ffff",
-        borderRadius: 12,
-        padding: 15,
     },
     listPlaceholder: {
         color: "#666",

@@ -601,7 +601,84 @@ const onReordered = async (fromIndex: number, toIndex: number) => {
   ```
 - Então passar como parâmetro a função de *callback* `removerGasto` via `onRemoverGasto`
 `<RenderGasto onRemoverGasto={removerGasto} index={index} item={item}/>`
+***
+### `<Modal>`
+- Exibe uma janela sobreposta (**modal**)
+- Principais atributos:
+  - `visible`: indica quanto o `Modal` deve ser exibido (utilizar em conjunto com uma variável de estado *true* / *false*)
+  - `transparent`: diz que o `Modal` deve ter seu fundo transparente (utlizar *true*)
+    ```javascript
+    <Modal visible={exibirPopUp} transparent={true}>
+        <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+                <Text style={styles.textContent}>{props.texto}</Text>
+                <Pressable
+                    style={[styles.button]}
+                    onPress={() => setExibePopUp(!exibirPopUp)}>
+                    <Text style={styles.buttonText}>Fechar</Text>
+                </Pressable>
+            </View>
+        </View>
+    </Modal>
+    ```
+- Estilos
+```javascript
+const styles = StyleSheet.create({
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+        borderColor: 'red'
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 50,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    button: {
+        backgroundColor: "#4A90E2",
+        paddingVertical: 14,
+        paddingHorizontal: 25,
+        borderRadius: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 3.5,
+        elevation: 3,
+        marginVertical: 10,
+        width: "90%",
+    },
+    buttonText: {
+        color: "#fff",
+        fontSize: 16,
+        fontWeight: "600",
+    },
+    textContent: {
+        fontSize: 20,
+        paddingBottom: 30
+    }
+})
+```
+***
 ## Exercícios
+- Para obter o projeto do repositório `git`
+    - Clonar o repositório com `git clone https://github.com/esensato/mobile-2025-02.git`
+    - Entrar na pasta do projeto `cd mobile-2025-02/aula/controlegastos`
+    - Instalar as dependências `npm install`
+    - Executar o projeto `npm run android`
 - Transformar o `<TextInput>` e o `<Button>` onde o gasto é adicionado na lista em um componente chamado `RenderEntradaGasto`;
 - Criar um componente `TelaPrincipal`, transferir o conteúdo de `App` para ele e ajustar o `App` para conter apenas a referência ao novo componente criado:
 ```javascript
@@ -618,108 +695,188 @@ export default function App() {
 - No componente `RenderEntradaGasto` criado:
   - Alterar o layout para permitir a entrada do valor do gasto
   - Criar uma nova variável de estado para armazenar o valor do gasto inserido (semelhante ao que foi feito para a descrição do gasto)
-  
 - Adicionar o valor do gasto em cada gasto inserido na lista
 - Inserir uma imagem (ícone de moeda, por exemplo) na linha do gasto
   `<Image source={require('../assets/001-coin.png')}/>`
 - Ao inserir ou remover um gasto, atualizar o total de despesas no campo **Total** (somente leitura)
-- **EXTRA**: utilizar `<Modal>` para exibir uma janela para avisar que o total de gastos ultrapassou R$ 1.000,00
-***
-### `<Modal>`
-- Exibe uma janela sobreposta (**modal**)
-- Principais atributos:
-  - `visible`: indica quanto o `Modal` deve ser exibido (utilizar em conjunto com uma variável de estado *true* / *false*)
-  - `transparent`: diz que o `Modal` deve ter seu fundo transparente (utlizar *true*)
-  ```javascript
-  <Modal visible={ exibirModal } transparent={true}>
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <Text>Modal</Text>
-          <Pressable
-      style={[styles.button, styles.buttonClose]}
-      onPress={() => setExibirModal(!exibirModal)}>
-      <Text style={styles.textStyle}>Fechar</Text>
-    </Pressable>
-        </View>
-      </View>
-  </Modal>
-
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-    borderColor: 'red'
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3'
-  }
-  ```
+- Utilizar `<Modal>` para exibir uma janela para avisar que o total de gastos ultrapassou R$ 1.000,00
 ***
 ### Navegação com React Navigation
 - [React Navigation](https://reactnavigation.org/docs/getting-started/) é um componente que implementa vários tipos de navegação para aplicações **React Native**
 - Um dos tipos de navegação mais comum é o [Stack Navigator](https://reactnavigation.org/docs/native-stack-navigator)
 - Instalação dos módulos necessários
-  ```powershell
-  npm install --save @react-navigation/native
-  npm install --save react-native-screens react-native-safe-area-context
-  npm install --save @react-navigation/native-stack
-  ```
+```shell
+npm install --save @react-navigation/native react-native-screens react-native-safe-area-context @react-navigation/native-stack
+```
 - Mover o conteúdo do arquivo `index.tsx` para um novo dentro de `components`, por exemplo, com o nome `TelaPrincipal.tsx`
 - Para implementar a navegação é necessário envolver os componentes em um `NavigationContainer` dentro do arquivo `index.tsx`
-  ```javascript
-  import { NavigationIndependentTree } from '@react-navigation/native';
-  import { createNativeStackNavigator } from '@react-navigation/native-stack';
-  import TelaPrincipal from './components/TelaPrincipal';
-  
-  const Stack = createNativeStackNavigator();
-  
-  export default function Index() {
-  
-    return <NavigationIndependentTree>
-      <Stack.Navigator>
-        <Stack.Screen name="Principal" component={TelaPrincipal} />
+```javascript
+import { NavigationIndependentTree } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import TelaPrincipal from './components/TelaPrincipal';
+
+const Stack = createNativeStackNavigator();
+
+export default function Index() {
+
+  return <NavigationIndependentTree>
+      <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#4A90E2' } }}>
+          <Stack.Screen name="Principal" component={TelaPrincipal} options={{ title: 'Gastos' }} />
       </Stack.Navigator>
-    </NavigationIndependentTree>
-  
-  }
-  ```
+  </NavigationIndependentTree>
+
+}
+```
 - Criar uma segunda tela `TelaDetalhes` que deve ser exibida ao clicar em um gasto na lista e incluí-la no `Stack` com o nome `detalhes`
 - A `TelaPrincipal` agora receberá como parâmetro `props` um objeto `navigator` (`TelaPrincipal({ navigator })`)
 - Para navegar para outra tela, basta utilizar
-
 `navigator.navigate('detalhes')`
 - Pode-se passar parâmetro também entre duas telas
-
 `navigator.navigate('detalhes', {idGasto: props.idx})`
 - Na tela destino, o acesso aos parâmetros deve ser feito por meio do componente `route`
-  ```javascript
-  export default function TelaDetalhe({ route }) {
-      const idGasto = route.params.idGasto;
-      return <Text>{idGasto}</Text>
-  }
-  ```
+```javascript
+export default function TelaDetalhe({ route }) {
+    const idGasto = route.params.idGasto;
+    return <Text>{idGasto}</Text>
+}
+```
+#### Bottom Tabs
+- São botões definidos na parte inferior da tela que permitem também a navegação rápida entre visualizações da aplicação
+- Instalação dos módulos necessários
+```shell
+npm install --save @react-navigation/bottom-tabs @react-native-vector-icons/ionicons
+```
+- Alterar a implementação
+```javascript
+import { NavigationIndependentTree } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from '@react-native-vector-icons/ionicons';
+import TelaPrincipal from './TelaPrincipal';
+import TelaDetalhe from './TelaDetalhe';
+
+const Tab = createBottomTabNavigator();
+
+export default function Index() {
+
+    return <NavigationIndependentTree>
+        <Tab.Navigator
+            screenOptions={({ route }) => ({
+                headerShown: false,
+                tabBarActiveTintColor: '#4A90E2',
+                tabBarInactiveTintColor: 'gray',
+                tabBarIcon: ({ color, size }) => {
+                    if (route.name === 'Principal')
+                        return <Ionicons name="cash-outline" size={size} color={color} />;
+                    else
+                        return <Ionicons name="document-attach-outline" size={size} color={color} />;
+                },
+            })} >
+            <Tab.Screen name="Principal" component={TelaPrincipal} options={{ title: 'Gastos' }} />
+            <Tab.Screen name="Detalhes" component={TelaDetalhe} options={{ title: 'Detalhes' }} />
+        </Tab.Navigator>
+    </NavigationIndependentTree>
+
+}
+```
+- Para incluir *badges* (contadores, por exemplo) nos botões, utilizar o `tabBarBadge` e, se for o caso, o `tabBarBadgeStyle` para personalizar o estilo
+```javascript
+<Tab.Screen name="Principal" component={TelaPrincipal} options={{ title: 'Gastos', tabBarBadge: 3, tabBarBadgeStyle: { color: 'black', backgroundColor: 'yellow' }}}>
+```
+### Gráficos de Barra
+- Existem vários componentes que podem ser utilizados para geração de gráficos, por exemplo, de barras, como exemplo o [react-native-chart-kit](https://github.com/indiespirit/react-native-chart-kit)
+- Instalação dos módulos necessários
+```shell
+npm install --save react-native-chart-kit react-native-svg
+```
+- Alterar a tela de detalhes para
+```javascript
+import { Dimensions, Text, View } from "react-native";
+import { BarChart } from 'react-native-chart-kit';
+export default function TelaDetalhe(props: any) {
+
+    return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <BarChart
+                data={{
+                    labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril'],
+                    datasets: [{ data: [20, 45, 28, 80] }],
+                }}
+                width={Dimensions.get('window').width - 16}
+                height={220}
+                yAxisLabel=""
+                yAxisSuffix=""
+                chartConfig={{
+                    backgroundColor: '#1cc910',
+                    backgroundGradientFrom: '#eff3ff',
+                    backgroundGradientTo: '#efefef',
+                    decimalPlaces: 0,
+                    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                    style: { borderRadius: 16 },
+                }}
+                style={{
+                    marginVertical: 8,
+                    borderRadius: 16,
+                }}
+            />
+        </View>
+    );
+}
+```
+- Outro exemplo agora para um gráfico de pizza
+```javascript
+const data = [
+    {
+        name: 'Aluguel',
+        population: 500,
+        color: '#f44336',
+        legendFontColor: '#333',
+        legendFontSize: 14,
+    },
+    {
+        name: 'Transporte',
+        population: 200,
+        color: '#2196f3',
+        legendFontColor: '#333',
+        legendFontSize: 14,
+    },
+    {
+        name: 'Alimentação',
+        population: 800,
+        color: '#4caf50',
+        legendFontColor: '#333',
+        legendFontSize: 14,
+    },
+    {
+        name: 'Lazer',
+        population: 300,
+        color: '#ff9800',
+        legendFontColor: '#333',
+        legendFontSize: 14,
+    },
+];
+
+return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <PieChart
+            data={data}
+            width={Dimensions.get('window').width - 16}
+            height={250}
+            accessor="population"          // campo usado para os valores
+            backgroundColor="transparent"  // deixa o fundo transparente
+            paddingLeft="15"
+            absolute                       // mostra os valores absolutos (sem %)
+            chartConfig={{
+                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            }}
+        />
+    </View>
+);
+```
+- Outras bibliotecas
+    - [react-native-svg-charts](https://github.com/JesperLekland/react-native-svg-charts)
+    - [victory-native](https://nearform.com/open-source/victory/docs/introduction/native/)
 ***
+
 ### Persistência com SQLite
 - É possível persistir dados localmente tanto em Android quando em iOS utilizando o banco de dados relacional **SQLite**
 - Uma referência completa pode ser encontrada [aqui](https://docs.expo.dev/versions/latest/sdk/sqlite/)
@@ -849,192 +1006,3 @@ const styles = StyleSheet.create({
     onDragEnd={(e) => this.setState({ x: e.nativeEvent.coordinate })} />
   ```
 - Eventos `onPress={(aqui: MapPressEvent) => console.log(aqui.nativeEvent.coordinate)}`
-***
-### Notifications
-- Permitem enviar mensagens de notificação dentro dos padrões de cada platadorma móvel
-- Com o uso das [Notificações do Expo](https://docs.expo.dev/versions/latest/sdk/notifications/) é possível trabalhar com notificações tanto para iOS quanto Android
-
-`npx expo install expo-notifications expo-device expo-constants`
-
-- Solicitanto autorização para receber notificações
-  ```javascript
-  const enviarNotificacao = async () => {
-
-    const perm = await Notifications.getPermissionsAsync();
-
-    console.log(perm);
-
-    if (perm.status === 'denied') {
-      await Notifications.requestPermissionsAsync();
-    }
-
-  }
-  ```
-- Agendando uma notificação (local)
-  ```javascript
-  Notifications.scheduleNotificationAsync({
-    content: {
-      title: 'Controle de Gastos',
-      body: "Você está gastando muito!",
-      data: {valor: 1000}
-    },
-    trigger: {
-      seconds: 5
-    },
-  });
-  ```
-- Respondendo a uma notificação (criar fora do escopo da função que declara o componente!!!)
-  ```javascript
-  Notifications.setNotificationHandler({
-    handleNotification: async () => {
-      return {
-        shouldShowAlert: true,
-        shouldPlaySound: false,
-        shouldSetBadge: false  
-      }
-    },
-  });
-  ```
-- Para *push notifications* (somente funciona em dispositivos reais)
-    - Obter o [projectId](https://expo.dev/login)
-    - [Expo Push Notifications Tool](https://expo.dev/notifications)
-    - O *projectId* deve ser colocado dentro do arquivo `app.json`
-    ```css
-    "extra": {
-      "projectId": "ID"
-    }
-    ```
-    - Ao executar o código abaixo será exibido o `ExponentPushToken` no console
-    ```javascript
-    import { useState, useEffect, useRef } from 'react';
-    import { Text, View, Button, Platform } from 'react-native';
-    import * as Device from 'expo-device';
-    import * as Notifications from 'expo-notifications';
-    import Constants from 'expo-constants';
-    
-    Notifications.setNotificationHandler({
-        handleNotification: async () => ({
-            shouldShowAlert: true,
-            shouldPlaySound: false,
-            shouldSetBadge: false,
-        }),
-    });
-    
-    
-    console.log(Constants?.expoConfig?.extra?.projectId);
-    
-    async function sendPushNotification(expoPushToken: string) {
-        const message = {
-            to: expoPushToken,
-            sound: 'default',
-            title: 'Original Title',
-            body: 'And here is the body!',
-            data: { someData: 'goes here' },
-        };
-    
-        await fetch('https://exp.host/--/api/v2/push/send', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Accept-encoding': 'gzip, deflate',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(message),
-        });
-    }
-    
-    
-    function handleRegistrationError(errorMessage: string) {
-        alert(errorMessage);
-        throw new Error(errorMessage);
-    }
-    
-    async function registerForPushNotificationsAsync() {
-        if (Platform.OS === 'android') {
-            Notifications.setNotificationChannelAsync('default', {
-                name: 'default',
-                importance: Notifications.AndroidImportance.MAX,
-                vibrationPattern: [0, 250, 250, 250],
-                lightColor: '#FF231F7C',
-            });
-        }
-    
-        if (Device.isDevice) {
-            const { status: existingStatus } = await Notifications.getPermissionsAsync();
-            let finalStatus = existingStatus;
-            if (existingStatus !== 'granted') {
-                const { status } = await Notifications.requestPermissionsAsync();
-                finalStatus = status;
-            }
-            if (finalStatus !== 'granted') {
-                handleRegistrationError('Permission not granted to get push token for push notification!');
-                return;
-            }
-            const projectId =
-                Constants?.expoConfig?.extra?.projectId;
-            if (!projectId) {
-                handleRegistrationError('Project ID not found');
-            }
-            try {
-                const pushTokenString = (
-                    await Notifications.getExpoPushTokenAsync({
-                        projectId,
-                    })
-                ).data;
-                console.log(pushTokenString);
-                return pushTokenString;
-            } catch (e: unknown) {
-                handleRegistrationError(`${e}`);
-            }
-        } else {
-            handleRegistrationError('Must use physical device for push notifications');
-        }
-    }
-    
-    export default function PushNotification(props: any) {
-        const [expoPushToken, setExpoPushToken] = useState('');
-        const [notification, setNotification] = useState<Notifications.Notification | undefined>(
-            undefined
-        );
-        const notificationListener = useRef<Notifications.Subscription>();
-        const responseListener = useRef<Notifications.Subscription>();
-    
-        useEffect(() => {
-            registerForPushNotificationsAsync()
-                .then(token => setExpoPushToken(token ?? ''))
-                .catch((error: any) => setExpoPushToken(`${error}`));
-    
-            notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-                setNotification(notification);
-            });
-    
-            responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-                console.log(response);
-            });
-    
-            return () => {
-                notificationListener.current &&
-                    Notifications.removeNotificationSubscription(notificationListener.current);
-                responseListener.current &&
-                    Notifications.removeNotificationSubscription(responseListener.current);
-            };
-        }, []);
-    
-        return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
-                <Text>Your Expo push token: {expoPushToken}</Text>
-                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                    <Text>Title: {notification && notification.request.content.title} </Text>
-                    <Text>Body: {notification && notification.request.content.body}</Text>
-                    <Text>Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
-                </View>
-                <Button
-                    title="Press to Send Notification"
-                    onPress={async () => {
-                        await sendPushNotification(expoPushToken);
-                    }}
-                />
-            </View>
-        );
-    }
-    ```
