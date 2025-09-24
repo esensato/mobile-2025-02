@@ -607,20 +607,20 @@ const onReordered = async (fromIndex: number, toIndex: number) => {
 - Principais atributos:
   - `visible`: indica quanto o `Modal` deve ser exibido (utilizar em conjunto com uma variável de estado *true* / *false*)
   - `transparent`: diz que o `Modal` deve ter seu fundo transparente (utlizar *true*)
-    ```javascript
-    <Modal visible={exibirPopUp} transparent={true}>
-        <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-                <Text style={styles.textContent}>{props.texto}</Text>
-                <Pressable
-                    style={[styles.button]}
-                    onPress={() => setExibePopUp(!exibirPopUp)}>
-                    <Text style={styles.buttonText}>Fechar</Text>
-                </Pressable>
-            </View>
+```javascript
+<Modal visible={exibirPopUp} transparent={true}>
+    <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+            <Text style={styles.textContent}>{props.texto}</Text>
+            <Pressable
+                style={[styles.button]}
+                onPress={() => setExibePopUp(!exibirPopUp)}>
+                <Text style={styles.buttonText}>Fechar</Text>
+            </Pressable>
         </View>
-    </Modal>
-    ```
+    </View>
+</Modal>
+```
 - Estilos
 ```javascript
 const styles = StyleSheet.create({
