@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import RenderItemGasto from "./RenderItemGasto";
 import ListaGasto from "./ListaGasto";
 import ListaGastoDragDrop from "./ListaGastoDragDrop";
+import PopUp from "./PopUp";
 
 export default function Index() {
 
@@ -58,11 +59,13 @@ export default function Index() {
       </View>
 
       {/* Área inferior: lista de gastos */}
+      <ListaGasto gasto={gasto} onPress={atualizarGasto} onLongPress={removerGastoLista} />
 
-      <ListaGastoDragDrop gastos={gasto} addGasto={addGasto} />
       { /* 
-      <ListaGasto gasto={gasto} onPress={atualizarGasto} onLongPress={removerGastoLista} />      
+      <ListaGastoDragDrop gastos={gasto} addGasto={addGasto} />
       */}
+
+      <PopUp texto="Teste Modal" exibir={true} />
 
     </View>
 
