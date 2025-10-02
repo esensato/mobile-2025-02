@@ -860,44 +860,43 @@ return (
     - [react-native-svg-charts](https://github.com/JesperLekland/react-native-svg-charts)
     - [victory-native](https://nearform.com/open-source/victory/docs/introduction/native/)
 ***
-
 ### Persistência com SQLite
 - É possível persistir dados localmente tanto em Android quando em iOS utilizando o banco de dados relacional **SQLite**
 - Uma referência completa pode ser encontrada [aqui](https://docs.expo.dev/versions/latest/sdk/sqlite/)
   `npx expo install expo-sqlite`
 - Criar um arquivo `banco-dados.tsx`
-  ```javascript
-    import * as SQLite from 'expo-sqlite';
-    
-    export const bcodados = SQLite.openDatabaseSync('gastos.db');
-    
-    export const iniciar = () => {
-    
-        bcodados.execSync('CREATE TABLE IF NOT EXISTS gastos (id INTEGER PRIMARY KEY NOT NULL, descricao TEXT NOT NULL, valor REAL NOT NULL)');
-    
-        console.log("Banco de dados iniciado");
-    }
-    
-    export const inserir = (descricao: string, valor: number) => {
-    
-        const ret = bcodados.runSync('INSERT INTO gastos (descricao, valor) VALUES(?, ?)', [descricao, valor]);
-        return ret;
-    
-    }
-    
-    export const listar = () => {
-    
-        return bcodados.getAllSync('SELECT * from gastos');
-    
-    }
+```javascript
+  import * as SQLite from 'expo-sqlite';
+  
+  export const bcodados = SQLite.openDatabaseSync('gastos.db');
+  
+  export const iniciar = () => {
+  
+      bcodados.execSync('CREATE TABLE IF NOT EXISTS gastos (id INTEGER PRIMARY KEY NOT NULL, descricao TEXT NOT NULL, valor REAL NOT NULL)');
+  
+      console.log("Banco de dados iniciado");
+  }
+  
+  export const inserir = (descricao: string, valor: number) => {
+  
+      const ret = bcodados.runSync('INSERT INTO gastos (descricao, valor) VALUES(?, ?)', [descricao, valor]);
+      return ret;
+  
+  }
+  
+  export const listar = () => {
+  
+      return bcodados.getAllSync('SELECT * from gastos');
+  
+  }
 
-  ```
+```
 - Utilizar o `useEffect` para garantir que o banco de dados seja iniciado apenas uma única vez:
-    ```javascript
-      useEffect(() => {
-        iniciar();
-      }, []);
-    ```
+```javascript
+  useEffect(() => {
+    iniciar();
+  }, []);
+```
 ***
 ### Requisições HTTP com Axios
 - Existem várias bibliotecas para efetuar requisições **HTTP**

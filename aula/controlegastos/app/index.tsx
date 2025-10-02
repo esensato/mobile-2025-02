@@ -1,77 +1,49 @@
+import { NavigationIndependentTree } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from '@react-native-vector-icons/ionicons';
+import TelaPrincipal from './TelaPrincipal';
+import DetalheGasto from './DetalheGasto';
+import GraficoBarra from './GraficoBarra';
+import GraficoPizza from './GraficoPizza';
+import { useEffect } from 'react';
+import { iniciar } from './banco-dados';
+import MapComponent from './MapComponent';
 
-import { View, Text, Pressable, TextInput, StatusBar, FlatList, Image } from "react-native";
-import { useState } from "react";
-import { estilo } from "./estilo";
-import { SafeAreaView } from "react-native-safe-area-context";
-import RenderItemGasto from "./RenderItemGasto";
-import ListaGasto from "./ListaGasto";
-import ListaGastoDragDrop from "./ListaGastoDragDrop";
-import PopUp from "./PopUp";
+const Tab = createBottomTabNavigator();
 
 export default function Index() {
 
-  type Gasto = { id: number, descricao: string, valor: number };
+  useEffect(() => {
+    iniciar();
+  }, []);
 
-  let [titulo, setTitulo] = useState('');
-  let [gasto, addGasto] = useState<Gasto[]>([]);
+  return <NavigationIndependentTree>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarActiveTintColor: '#4A90E2',
+        tabBarInactiveTintColor: 'gray',
+        tabBarIcon: ({ color, size }) => {
+          if (route.name === 'Principal')
+            return <Ionicons name="cash-outline" size={size} color={color} />;
+          else if (route.name === 'Barra')
+            return <Ionicons name="bar-chart" size={size} color={color} />;
+          else if (route.name === 'Pizza')
+            return <Ionicons name="pizza-sharp" size={size} color={color} />;
+          else if (route.name === 'Mapa')
+            return <Ionicons name="map-outline" size={size} color={color} />;
+          else
+            return <Ionicons name="document-attach-outline" size={size} color={color} />;
+        },
+      })} >
 
-  function onTituloChange(textoDigitado: string) {
-    console.log(textoDigitado);
-    setTitulo(textoDigitado);
-  }
+      <Tab.Screen name="Principal" component={TelaPrincipal} options={{ title: 'Gastos', tabBarBadge: 3, tabBarBadgeStyle: { color: 'black', backgroundColor: 'yellow' } }} />
+      <Tab.Screen name="Detalhes" component={DetalheGasto} options={{ title: 'Detalhes' }} />
+      <Tab.Screen name="Barra" component={GraficoBarra} options={{ title: 'Barra' }} />
+      <Tab.Screen name="Pizza" component={GraficoPizza} options={{ title: 'Pizza' }} />
+      <Tab.Screen name="Mapa" component={MapComponent} options={{ title: 'Mapa' }} />
 
-  function addGastoHandler() {
-    // ["Gasto 1", "Gasto 2"]
-    // ...["Gasto 1", "Gasto 2"] = "Gasto1", "Gasto 2"
-    // "Gasto1", "Gasto 2", titulo = ["Gasto1", "Gasto 2", titulo]
-
-    //[{id:1, descricao: "Gasto 1", valor: 100}, {id:2, descricao: "Gasto 2", valor: 200}]
-    let gastosAtuais = [...gasto];
-    const novoGasto: Gasto = { id: Date.now(), descricao: titulo, valor: 0 };
-    gastosAtuais.push(novoGasto);
-    addGasto(gastosAtuais);
-    setTitulo("");
-  }
-
-  function removerGastoLista(index: number) {
-    let gastosAtuais = [...gasto];
-    gastosAtuais.splice(index, 1);
-    addGasto(gastosAtuais);
-  }
-
-  function atualizarGasto(gasto: Gasto) {
-    setTitulo(gasto.descricao);
-  }
-
-
-
-  return <SafeAreaView style={{ flex: 1 }}>
-    <StatusBar />
-    <View style={estilo.container}>
-      {/* Área superior: input + botão */}
-      <View style={estilo.topSection}>
-        <TextInput style={estilo.input} onChangeText={onTituloChange} value={titulo} placeholder="Descrição do Gasto" />
-        <Pressable style={({ pressed }) => [estilo.button, pressed && estilo.buttonPressed]}
-          onPress={addGastoHandler} >
-          <Text style={estilo.buttonText}>Adicionar</Text>
-        </Pressable>
-
-      </View>
-
-      {/* Área inferior: lista de gastos */}
-      <ListaGasto gasto={gasto} onPress={atualizarGasto} onLongPress={removerGastoLista} />
-
-      { /* 
-      <ListaGastoDragDrop gastos={gasto} addGasto={addGasto} />
-      */}
-
-      <PopUp texto="Teste Modal" exibir={true} />
-
-    </View>
-
-  </SafeAreaView>
-
+    </Tab.Navigator>
+  </NavigationIndependentTree>
 
 }
-
-
