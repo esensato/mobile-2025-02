@@ -252,7 +252,471 @@ Acao opcoes() {
 }
 ```    
 ***
-### Flutter
+### Conversor de Moedas
+- Incluir a dependência `http`
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  http:
+```
+- O *endpoint* a ser acessado é este: `https://api.frankfurter.app/latest?amount=$valor&from=$_moedaDe&to=$_moedaPara`
+- O resultado tem o formato *json*
+```json
+{
+  "amount": 1,
+  "base": "BRL",
+  "date": "2025-10-22",
+  "rates": {
+    "USD": 0.18566
+  }
+}
+```
+- Implementação
+```dart
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+void main() {
+  runApp(const ConversorMoedasApp());
+}
+
+class ConversorMoedasApp extends StatelessWidget {
+  const ConversorMoedasApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Conversor de Moedas',
+      theme: ThemeData(primarySwatch: Colors.green),
+      home: const TelaConversor(),
+    );
+  }
+}
+
+class TelaConversor extends StatefulWidget {
+  const TelaConversor({super.key});
+
+  @override
+  State<TelaConversor> createState() => _TelaConversorState();
+}
+
+class _TelaConversorState extends State<TelaConversor> {
+  final TextEditingController _valorController = TextEditingController(text: "1");
+  String _moedaDe = 'USD';
+  String _moedaPara = 'EUR';
+  String _resultado = '';
+  bool _estaCarregando = false;
+
+  Future<void> _converter() async {
+    final valor = double.tryParse(_valorController.text);
+    if (valor == null) {
+      setState(() {
+        _resultado = 'Valor inválido';
+      });
+      return;
+    }
+
+    setState(() {
+      _estaCarregando = true;
+    });
+
+    try {
+      final url = Uri.parse('https://api.frankfurter.app/latest?amount=$valor&from=$_moedaDe&to=$_moedaPara');
+      final resposta = await http.get(url);
+      if (resposta.statusCode == 200) {
+        final dados = json.decode(resposta.body);
+        final rates = dados['rates'] as Map<String,dynamic>;
+        final convertido = rates[_moedaPara];
+        setState(() {
+          _resultado = '$valor $_moedaDe = $convertido $_moedaPara';
+        });
+      } else {
+        setState(() {
+          _resultado = 'Erro na conversão: ${resposta.statusCode}';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _resultado = 'Erro: $e';
+      });
+    } finally {
+      setState(() {
+        _estaCarregando = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Conversor de Moedas')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            TextField(
+              controller: _valorController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              decoration: const InputDecoration(labelText: 'Valor'),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButton<String>(
+                    value: _moedaDe,
+                    onChanged: (v) => setState(() => _moedaDe = v!),
+                    items: const [
+                      DropdownMenuItem(value: 'USD', child: Text('USD')),
+                      DropdownMenuItem(value: 'EUR', child: Text('EUR')),
+                      DropdownMenuItem(value: 'BRL', child: Text('BRL')),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: DropdownButton<String>(
+                    value: _moedaPara,
+                    onChanged: (v) => setState(() => _moedaPara = v!),
+                    items: const [
+                      DropdownMenuItem(value: 'USD', child: Text('USD')),
+                      DropdownMenuItem(value: 'EUR', child: Text('EUR')),
+                      DropdownMenuItem(value: 'BRL', child: Text('BRL')),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _estaCarregando ? null : _converter,
+              child: _estaCarregando
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : const Text('Converter'),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              _resultado,
+              style: const TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+```
+***
+### Pedidos Pizza
+- Criar uma nova verão do app para o pedido de pizzas utilizando *cards* e *pageview*
+#### PageViewer
+- O *pageviewer* tem os principais parâmetros:
+    - **itemCount**: número total de páginas a serem exibidas
+    - **controller**: controla qual página está visível e a rolagem
+    - **itemBuilder**: cria cada página (**card**) do **PageView** (recebe o **BuildContext** e o índice da página)
+    - **onPageChanged**: *callback* chamado quando o usuário desliza para uma nova página (recebe o índice da nova página)
+#### Cards
+- O **Card** é um *widget* que serve para exibir conteúdo agrupado dentro de um “cartão” com elevação e cantos arredondados
+- Algumas propriedades
+    - **elevation**: define a sombra do card, dando um efeito 3D
+    - **shape**: permite arredondar os cantos ou adicionar bordas. Exemplo:
+    ```dart
+    RoundedRectangleBorder(side: BorderSide(color: Colors.green, width: 3), 
+                           borderRadius: BorderRadius.circular(20))
+    ```
+    - **child**: recebe qualquer *widget* (geralmente **Column**, **Row** ou **ListTile**), isto é, o conteúdo do **Card**.
+#### Expanded
+- Permite definir como o espaço dentro de uma linha ou coluna é distribuído
+```dart
+Row(
+  children: [
+    Expanded(
+      flex: 2,
+      child: Container(color: Colors.red),
+    ),
+    Expanded(
+      flex: 1,
+      child: Container(color: Colors.blue),
+    ),
+  ],
+)
+```
+- Dentro de uma coluna, utilizado para preencher todo o espaço restante
+```dart
+Column(
+  children: [
+    Text("Título"),
+    Expanded(
+      child: ListView(...), // ocupa o restante da tela
+    ),
+  ],
+)
+```
+#### ClipRRect
+- Usado para recortar seu filho em um retângulo com cantos arredondados
+- Útil para dar efeito de borda arredondada em imagens, cards ou containers
+```dart
+ClipRRect(
+  borderRadius: BorderRadius.circular(20), // raio dos cantos
+  child: Image.network(
+    "https://example.com/pizza.jpg",
+    width: 200,
+    height: 150,
+    fit: BoxFit.cover,
+  ),
+)
+```
+#### SnackBar
+- Utilizado para exibir mensagens temporárias na parte inferior da tela
+```dart
+ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text("Pizza adicionada ao pedido!"),
+    duration: Duration(seconds: 2), // duração da mensagem
+    action: SnackBarAction(
+      label: "Desfazer",
+      onPressed: () {
+        // ação ao clicar
+      },
+    ),
+  ),
+);
+```
+#### Implementação
+- Segue abaixo a implementação completa do app de pedido de pizza
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const PizzariaApp());
+}
+
+class PizzariaApp extends StatelessWidget {
+  const PizzariaApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Escolha sua Pizza',
+      home: const TelaPizzas(),
+    );
+  }
+}
+
+class TelaPizzas extends StatefulWidget {
+  const TelaPizzas({super.key});
+
+  @override
+  State<TelaPizzas> createState() => _TelaPizzasState();
+}
+
+class _TelaPizzasState extends State<TelaPizzas> {
+  final List<Map<String, dynamic>> _pizzas = [
+    {
+      "nome": "Calabresa",
+      "descricao": "Mussarela, calabresa fatiada e cebola roxa",
+      "preco": 42.50,
+      "imagem": "https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=800"
+    },
+    {
+      "nome": "Quatro Queijos",
+      "descricao": "Mussarela, provolone, parmesão e gorgonzola",
+      "preco": 44.90,
+      "imagem": "https://images.unsplash.com/photo-1601924579644-c85c6f99b9a3?w=800"
+    },
+    {
+      "nome": "Portuguesa",
+      "descricao": "Presunto, ovos, cebola, ervilha e azeitona",
+      "preco": 45.90,
+      "imagem": "https://images.unsplash.com/photo-1618213837799-96b4492f88a6?w=800"
+    },
+  ];
+
+  final List<int> _selecionadas = [];
+
+  void _alternarSelecao(int index) {
+    setState(() {
+      if (_selecionadas.contains(index)) {
+        _selecionadas.remove(index);
+      } else {
+        _selecionadas.add(index);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Escolha sua Pizza 🍕'),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: PageView.builder(
+              itemCount: _pizzas.length,
+              controller: PageController(viewportFraction: 0.85),
+              itemBuilder: (context, index) {
+                final pizza = _pizzas[index];
+                final selecionada = _selecionadas.contains(index);
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                  child: Card(
+                    elevation: 6,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: selecionada
+                          ? const BorderSide(color: Colors.green, width: 3)
+                          : BorderSide.none,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                            child: Image.network(
+                              pizza["imagem"],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                pizza["nome"],
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                pizza["descricao"],
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                "R\$ ${pizza["preco"].toStringAsFixed(2)}",
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.redAccent,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              ElevatedButton.icon(
+                                onPressed: () => _alternarSelecao(index),
+                                icon: Icon(
+                                  selecionada ? Icons.check_circle : Icons.add_circle_outline,
+                                ),
+                                label: Text(selecionada ? "Selecionada" : "Adicionar"),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: selecionada ? Colors.green : Colors.redAccent,
+                                  foregroundColor: Colors.white,
+                                  minimumSize: const Size(double.infinity, 45),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: ElevatedButton(
+              onPressed: _selecionadas.isEmpty
+                  ? null
+                  : () {
+                final qtd = _selecionadas.length;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Você selecionou $qtd pizza(s)!")),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 50),
+                backgroundColor: Colors.redAccent,
+                foregroundColor: Colors.white,
+              ),
+              child: Text(
+                _selecionadas.isEmpty
+                    ? "Nenhuma pizza selecionada"
+                    : "Finalizar pedido (${_selecionadas.length})",
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+#### Refatoração
+- O código acima pode ser melhorado criando componentes separados
+- Criar uma classe de dados para encapsular os atributos da pizza (nome, descrição, preço e imagem)
+- Utilizar a abordagem de métodos *callback* com o **VoidCallback**
+```dart
+class PizzaCard extends StatelessWidget {
+  final bool selecionada;
+  final VoidCallback onSelecionar; // callback recebido do pai
+
+  const PizzaCard({
+    super.key,
+    required this.selecionada,
+    required this.onSelecionar,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onSelecionar, // chama o callback quando clicado
+      child: Text(selecionada ? "Selecionada" : "Adicionar"),
+    );
+  }
+}
+```
+- Passando o *callback* como parâmetro para o *widget* **PizzaCard** via método construtor
+```dart
+class TelaPizzas extends StatefulWidget {
+  @override
+  State<TelaPizzas> createState() => _TelaPizzasState();
+}
+
+class _TelaPizzasState extends State<TelaPizzas> {
+  bool selecionada = false;
+
+  void alternarSelecao() {
+    setState(() {
+      selecionada = !selecionada; // atualiza estado do pai
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PizzaCard(
+      selecionada: selecionada,
+      onSelecionar: alternarSelecao, // passa função como callback
+    );
+  }
+}
+```
+***
+### Simple Black jack
 - Criar uma pasta `assets` dentro da raiz do projeto
 - Copiar o arquivo `card-deck.png` para dentro da pasta `assets`
 - Incluir a referência dentro do arquivo `pubspec.yaml`
